@@ -8,28 +8,19 @@ import ChatList from "./ChatList";
 function Home() {
   const navigate = useNavigate();
   const { state, setState } = ChatState();
-  const location=useLocation()
+  const location = useLocation();
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("chitChatUser"));
     if (user) {
       setState({ ...state, user: user });
-    }
-    else{
-      navigate('/login')
+    } else {
+      navigate("/login");
     }
   }, [location]);
 
-  const logOut = () => {
-    localStorage.removeItem("chitChatUser");
-    setState({ ...state, user: undefined });
-    navigate("/login");
-  };
-
-  console.log(state)
-
   return (
-    <Box display='flex' className="home">
+    <Box display="flex" className="home">
       <ChatList />
       <Chat />
     </Box>

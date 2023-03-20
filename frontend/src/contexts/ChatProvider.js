@@ -7,7 +7,7 @@ const ChatProvider = ({ children }) => {
     chats: [],
     users: [],
     selectedChat: undefined,
-    messages:[]
+    messages: [],
   });
 
   return (

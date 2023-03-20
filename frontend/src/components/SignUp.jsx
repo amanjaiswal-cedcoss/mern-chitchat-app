@@ -266,7 +266,11 @@ function SignUp() {
                 required={formData.pic.required}
               />
             </Form.Group>
-            <Button disabled={loading} className="w-100 bg-wtspgreen rounded-0 border-0" type="submit">
+            <Button
+              disabled={loading}
+              className="w-100 bg-wtspgreen rounded-0 border-0"
+              type="submit"
+            >
               {loading ? "Loading…" : "Sign Up"}
             </Button>
           </Form>

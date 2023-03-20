@@ -7,13 +7,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ChatProvider from "../contexts/ChatProvider";
 
 function ChitChat() {
-
   const routes = [
     {
       path: "/",
-      element: (
-          <Home />
-      ),
+      element: <Home />,
     },
     {
       path: "/login",

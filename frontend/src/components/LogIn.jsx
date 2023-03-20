@@ -25,7 +25,7 @@ function LogIn() {
   const [toast, setToast] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   const signIn = async (e) => {
     e.preventDefault();
@@ -80,7 +80,7 @@ function LogIn() {
             { open: true, type: "success", msg: "Login Successfull" },
           ]);
           setLoading(false);
-          navigate('/')
+          navigate("/");
         } catch (err) {
           console.log(err);
           setToast([
@@ -134,29 +134,33 @@ function LogIn() {
               signIn(e);
             }}
           >
-              <FloatingLabel label="Email or Phone" className="mb-3">
-                <Form.Control
-                  required
-                  value={formData.emailOrPhone.value}
-                  onChange={(e) => {
-                    changeHandler(e.target.value, "emailOrPhone");
-                  }}
-                  placeholder="Email or Phone"
-                  isInvalid={formData.emailOrPhone.invalid}
-                />
-              </FloatingLabel>
-              <FloatingLabel label="Password" className="mb-3">
-                <Form.Control
-                  type="password"
-                  required
-                  value={formData.password.value}
-                  onChange={(e) => {
-                    changeHandler(e.target.value, "password");
-                  }}
-                  placeholder="Password"
-                />
-              </FloatingLabel>
-            <Button disabled={loading} className="w-100 bg-wtspgreen rounded-0 border-0" type="submit">
+            <FloatingLabel label="Email or Phone" className="mb-3">
+              <Form.Control
+                required
+                value={formData.emailOrPhone.value}
+                onChange={(e) => {
+                  changeHandler(e.target.value, "emailOrPhone");
+                }}
+                placeholder="Email or Phone"
+                isInvalid={formData.emailOrPhone.invalid}
+              />
+            </FloatingLabel>
+            <FloatingLabel label="Password" className="mb-3">
+              <Form.Control
+                type="password"
+                required
+                value={formData.password.value}
+                onChange={(e) => {
+                  changeHandler(e.target.value, "password");
+                }}
+                placeholder="Password"
+              />
+            </FloatingLabel>
+            <Button
+              disabled={loading}
+              className="w-100 bg-wtspgreen rounded-0 border-0"
+              type="submit"
+            >
               {loading ? "Loading…" : "Log In"}
             </Button>
           </Form>

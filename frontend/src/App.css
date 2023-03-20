@@ -49,8 +49,10 @@
 .chat {
     background-color: #e5ddd5;
     overflow-y: scroll;
+    min-height: 100%;
 }
 
-.modal {
-    /* max-width: 230px; */
+.chat::-webkit-scrollbar,
+.chatlist::-webkit-scrollbar {
+    display: none;
 }

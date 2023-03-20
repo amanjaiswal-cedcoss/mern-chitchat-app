@@ -5,7 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import {
   ChatOutlined,
   GroupsOutlined,
-  MoreVertOutlined,
+  Logout,
   Search,
 } from "@mui/icons-material";
 import { getSender } from "../config/ChatLogics";
@@ -18,15 +18,19 @@ import {
   ListItem,
   OutlinedInput,
   Tooltip,
+  Snackbar,
 } from "@mui/material";
 import { useState } from "react";
 import AddChatModal from "./AddChatModal";
 import AddGroupChatModal from "./AddGroupChatModal";
+import { useNavigate } from "react-router-dom";
 
 function ChatList() {
   const { state, setState } = ChatState();
   const [addChat, setAddChat] = useState(false);
   const [addGroupChat, setAddGroupChat] = useState(false);
+  const [search, setSearch] = useState("");
+  const navigate = useNavigate();
 
   const fetchChats = async () => {
     try {
@@ -45,54 +49,83 @@ function ChatList() {
     fetchChats();
   }, [state.user]);
 
+  const refinedChats = state.chats.filter(
+    (ele) =>
+      (ele.isGroupChat &&
+        ele.chatName.toLowerCase().includes(search.toLowerCase())) ||
+      (!ele.isGroupChat &&
+        ele.users.find((user) =>
+          user.name.toLowerCase().startsWith(search.toLowerCase())
+        ))
+  );
+
+  const logOut = () => {
+    localStorage.removeItem("chitChatUser");
+    setState({ ...state, user: undefined });
+    navigate("/login");
+  };
+
   return (
     <div className="chatlist">
       {state.user ? (
         <>
-          <Box
-            className="bg-grey"
-            display="flex"
-            justifyContent="space-between"
-            p={1}
-          >
-            <Avatar src={state.user.pic} alt="user avatar" />
-            <Box>
-              <Tooltip title="New Chat">
-                <IconButton
-                  onClick={() => {
-                    setAddChat(true);
-                  }}
-                >
-                  <ChatOutlined fontSize="small" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="New Group Chat">
-                <IconButton
-                  onClick={() => {
-                    setAddGroupChat(true);
-                  }}
-                >
-                  <GroupsOutlined fontSize="small" />
-                </IconButton>
-              </Tooltip>
-              <IconButton>
-                <MoreVertOutlined fontSize="small" />
-              </IconButton>
+          <Box position="sticky" top={0} zIndex={2} bgcolor="white">
+            <Box
+              className="bg-grey"
+              display="flex"
+              justifyContent="space-between"
+              p={1}
+            >
+              <Avatar src={state.user.pic} alt="user avatar" />
+              <Box>
+                <Tooltip title="New Chat">
+                  <IconButton
+                    onClick={() => {
+                      setAddChat(true);
+                    }}
+                  >
+                    <ChatOutlined fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="New Group Chat">
+                  <IconButton
+                    onClick={() => {
+                      setAddGroupChat(true);
+                    }}
+                  >
+                    <GroupsOutlined fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Log Out">
+                  <IconButton onClick={logOut}>
+                    <Logout fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            </Box>
+            <Box
+              p={1}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <OutlinedInput
+                size="small"
+                placeholder="Search for a chat"
+                startAdornment={
+                  <InputAdornment position="start">
+                    <Search />
+                  </InputAdornment>
+                }
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
+              />
             </Box>
           </Box>
-          <Box p={1} display="flex" alignItems="center" justifyContent="center">
-            <OutlinedInput
-              size="small"
-              placeholder="Search for a chat"
-              startAdornment={
-                <InputAdornment position="start">
-                  <Search />
-                </InputAdornment>
-              }
-            />
-          </Box>
           <List>
-            {state.chats.map((ele) => (
+            {refinedChats.map((ele) => (
               <ListItem
                 key={ele._id}
                 divider

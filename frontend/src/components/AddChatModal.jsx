@@ -41,18 +41,19 @@ const AddChatModal = (props) => {
       };
       let { data } = await axios.post("/api/chat", { userId }, config);
       console.log(data);
-      // setState((prev) => ({ ...prev, chats: [ ...state.chats, data ] }));
+      if (state.chats.find((ele) => ele._id === data._id)) {
+        setState((prev) => ({ ...prev, selectedChat: data }));
+      } else {
+        setState((prev) => ({ ...prev, chats: [...state.chats, data] }));
+      }
+      handleClose();
     } catch (err) {
       console.log(err);
     }
   };
 
   return (
-    <Dialog
-      open={addChat}
-      onClose={handleClose}
-      scroll="paper"
-    >
+    <Dialog open={addChat} onClose={handleClose} scroll="paper">
       <Box maxWidth={300}>
         <Typography margin={2} variant="h6">
           Tap on a user to start chat
