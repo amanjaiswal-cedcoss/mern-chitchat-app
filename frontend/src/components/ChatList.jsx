@@ -18,7 +18,6 @@ import {
   ListItem,
   OutlinedInput,
   Tooltip,
-  Snackbar,
 } from "@mui/material";
 import { useState } from "react";
 import AddChatModal from "./AddChatModal";
@@ -127,6 +126,7 @@ function ChatList() {
           <List>
             {refinedChats.map((ele) => (
               <ListItem
+                button
                 key={ele._id}
                 divider
                 onClick={() => {
@@ -138,7 +138,7 @@ function ChatList() {
                     alt="chat avatar"
                     src={
                       ele.isGroupChat
-                        ? ele.groupAdmin.pic
+                        ? ele.groupPic
                         : getSender(state.user._id, ele.users).pic
                     }
                   />

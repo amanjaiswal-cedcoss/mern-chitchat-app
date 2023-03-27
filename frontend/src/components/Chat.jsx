@@ -1,4 +1,4 @@
-import { Add, KeyboardArrowDown, KeyboardArrowUp, Send } from "@mui/icons-material";
+import { Send } from "@mui/icons-material";
 import {
   Avatar,
   Box,
@@ -6,7 +6,6 @@ import {
   Input,
   IconButton,
   CircularProgress,
-  Fab,
 } from "@mui/material";
 import axios from "axios";
 import React from "react";
@@ -50,10 +49,6 @@ function Chat() {
     if (message === "") {
       return;
     }
-    console.log({
-      content: message,
-      chatId: state.selectedChat._id,
-    });
     try {
       let config = {
         headers: {
@@ -97,7 +92,7 @@ function Chat() {
               alt="chat avatar"
               src={
                 state.selectedChat.isGroupChat
-                  ? state.selectedChat.groupAdmin.pic
+                  ? state.selectedChat.groupPic
                   : getSender(state.user._id, state.selectedChat.users).pic
               }
             />
@@ -112,14 +107,12 @@ function Chat() {
             display="flex"
             flexDirection="column"
             gap="5px"
-            minHeight="500px"
+            minHeight="435px"
+            position='relative'
           >
-            <Fab color="primary" translate="">
-              <KeyboardArrowUp/>
-            </Fab>
             {loading ? (
-              <Box>
-                <CircularProgress />
+              <Box position='absolute' top='45%' left='45%'>
+                <CircularProgress/>
               </Box>
             ) : (
               state.messages.map((ele) => {
@@ -131,7 +124,7 @@ function Chat() {
                     justifyContent={sender ? "flex-end" : ""}
                   >
                     <Box
-                      maxWidth="50%"
+                      maxWidth="70%"
                       width="max-content"
                       bgcolor={sender ? "#d4fad1" : "white"}
                       padding="2px 6px"

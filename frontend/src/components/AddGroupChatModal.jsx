@@ -1,4 +1,5 @@
 import {
+  Alert,
   Avatar,
   Box,
   Button,
@@ -6,6 +7,7 @@ import {
   Dialog,
   List,
   ListItem,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
@@ -18,6 +20,7 @@ const AddGroupChatModal = (props) => {
   const { state, setState } = ChatState();
   const [groupUsers, setGroupUsers] = useState([]);
   const [formData, setFormData] = useState({ groupName: "" });
+  const [toast, setToast] = useState({ open: false, type: "", message: "" });
 
   const { addGroupChat, setAddGroupChat } = { ...props };
 
@@ -56,8 +59,21 @@ const AddGroupChatModal = (props) => {
     setGroupUsers([...temp]);
   };
 
-  const startGroupChat = async (userId) => {
+  const startGroupChat = async () => {
     if (formData.groupName === "") {
+      setToast({
+        open: true,
+        type: "error",
+        message: "Group name cannot be empty",
+      });
+      return;
+    }
+    if (groupUsers.filter((ele) => ele.selected).length < 2) {
+      setToast({
+        open: true,
+        type: "error",
+        message: "Add atleast two members in the group",
+      });
       return;
     }
     try {
@@ -78,7 +94,13 @@ const AddGroupChatModal = (props) => {
       };
 
       let { data } = await axios.post("/api/chat/group", obj, config);
-      setState((prev) => ({ ...prev, chats: [...state.chats, data] }));
+      handleClose();
+      console.log(data);
+      setState((prev) => ({
+        ...prev,
+        chats: [...state.chats, data],
+        selectedChat: data,
+      }));
     } catch (err) {
       console.log(err);
     }
@@ -86,6 +108,23 @@ const AddGroupChatModal = (props) => {
 
   return (
     <Dialog open={addGroupChat} onClose={handleClose} scroll="paper">
+      <Snackbar
+        open={toast.open}
+        autoHideDuration={3000}
+        onClose={() => {
+          setToast({ ...toast, open: false });
+        }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => {
+            setToast({ ...toast, open: false });
+          }}
+          severity={toast.type}
+        >
+          {toast.message}
+        </Alert>
+      </Snackbar>
       <Box p={2} maxWidth={300}>
         <TextField
           size="small"
@@ -100,6 +139,7 @@ const AddGroupChatModal = (props) => {
             .filter((ele) => ele.selected)
             .map((ele) => (
               <Chip
+                key={ele._id}
                 color="success"
                 size="small"
                 label={ele.name}
@@ -118,7 +158,6 @@ const AddGroupChatModal = (props) => {
               <ListItem
                 button
                 key={ele._id}
-                // divider
                 onClick={() => {
                   toggleUser(ele._id);
                 }}

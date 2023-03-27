@@ -40,11 +40,10 @@ const AddChatModal = (props) => {
         },
       };
       let { data } = await axios.post("/api/chat", { userId }, config);
-      console.log(data);
       if (state.chats.find((ele) => ele._id === data._id)) {
         setState((prev) => ({ ...prev, selectedChat: data }));
       } else {
-        setState((prev) => ({ ...prev, chats: [...state.chats, data] }));
+        setState((prev) => ({ ...prev, chats: [...state.chats, data],selectedChat: data }));
       }
       handleClose();
     } catch (err) {

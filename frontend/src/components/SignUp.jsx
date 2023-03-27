@@ -169,11 +169,9 @@ function SignUp() {
     setToast([...toast]);
   };
 
-  console.log(formData);
-
   return (
     <>
-      <ToastContainer className="bg-white" position="top-end">
+      <ToastContainer className="bg-white" position="bottom-center" >
         {toast.map((ele, index) => {
           return (
             <Toast

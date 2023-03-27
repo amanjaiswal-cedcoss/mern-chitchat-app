@@ -73,7 +73,6 @@ function LogIn() {
             },
             config
           );
-          console.log(data);
           localStorage.setItem("chitChatUser", JSON.stringify(data));
           setToast([
             ...toast,
@@ -82,10 +81,9 @@ function LogIn() {
           setLoading(false);
           navigate("/");
         } catch (err) {
-          console.log(err);
           setToast([
             ...toast,
-            { open: true, type: "danger", msg: "Error Occured" },
+            { open: true, type: "danger", msg: err.response.data.message },
           ]);
           setLoading(false);
         }
@@ -105,7 +103,7 @@ function LogIn() {
 
   return (
     <>
-      <ToastContainer className="bg-white" position="top-end">
+      <ToastContainer className="bg-white" position="bottom-center">
         {toast.map((ele, index) => {
           return (
             <Toast
